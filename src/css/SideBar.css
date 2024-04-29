@@ -1,0 +1,54 @@
+
+
+aside {
+  background-color: #f34040;
+  color: #fff;
+  padding: 20px;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  display: block; 
+  margin-bottom: 10px;
+}
+
+nav ul li button {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px;
+  text-align: left;
+  display: flex; 
+  align-items: center; 
+}
+
+nav ul li button svg {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+nav ul li button:hover {
+  background-color: #555;
+}
+
+nav ul li button:hover svg {
+  animation: bounce 0.3s linear; 
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

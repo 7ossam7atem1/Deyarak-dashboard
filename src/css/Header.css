@@ -1,0 +1,33 @@
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-photo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.username {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  margin-right: 20px;
+}
+
+.user-icon {
+  font-size: 24px;
+  margin-right: 5px;
+}
+
+.btn-light {
+  background-color: #fff;
+  color: #9b4343;
+}
+
+.logo {
+  width: 60px; 
+  margin-right: 10px;
+}
