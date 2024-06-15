@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import '../css/Login.css'; // Adjust CSS file if necessary
+import '../css/Login.css';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -26,6 +26,7 @@ const LoginForm = () => {
 
       if (status === 'success' && token) {
         Cookies.set('token', token, { expires: 90 });
+        Cookies.set('userId', response.data.data.user._id);
         window.location.href = '/dashboard';
       } else {
         setError('Login failed');

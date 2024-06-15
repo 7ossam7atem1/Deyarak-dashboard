@@ -18,12 +18,12 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
   useEffect(() => {
     async function fetchProperty() {
       try {
-        const token = Cookies.get('token'); // Get the token from cookies
+        const token = Cookies.get('token');
         const response = await axios.get(
           `https://deyarak-app.onrender.com/api/v1/properties/${propertyId}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Include the token in the request headers
+              Authorization: `Bearer ${token}`, 
             },
           }
         );

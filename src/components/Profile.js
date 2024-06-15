@@ -10,12 +10,20 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
+    useState(false);
 
   const [updatedUser, setUpdatedUser] = useState({
     name: '',
     email: '',
     phone: '',
     photo: null,
+  });
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    newPasswordConfirm: '',
   });
 
   useEffect(() => {
@@ -39,11 +47,10 @@ const Profile = () => {
     };
 
     fetchProfile();
-  }, [isModalOpen]); // Fetch data when modal is opened or closed
+  }, [isModalOpen, isChangePasswordModalOpen]);
 
   const handleUpdate = () => {
     setIsModalOpen(true);
-    // Populate the form fields with current user data
     if (user) {
       setUpdatedUser({
         name: user.name,
@@ -54,13 +61,27 @@ const Profile = () => {
     }
   };
 
+  const handlePasswordChange = () => {
+    setIsChangePasswordModalOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleCloseChangePasswordModal = () => {
+    setIsChangePasswordModalOpen(false);
+    setError(null);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUpdatedUser({ ...updatedUser, [name]: value });
+  };
+
+  const handlePasswordInputChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData({ ...passwordData, [name]: value });
   };
 
   const handleFileChange = (e) => {
@@ -89,23 +110,34 @@ const Profile = () => {
           },
         }
       );
-      setIsModalOpen(false); // Close modal after successful update
+      setIsModalOpen(false);
     } catch (error) {
       console.error('Error updating profile:', error);
     }
   };
 
-  if (loading) {
-    return (
-      <div className='profile-container loading'>
-        <div className='loading-spinner'></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div className='profile-container error'>{error}</div>;
-  }
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    try {
+      const token = Cookies.get('token');
+      const userId = Cookies.get('userId');
+      console.log(userId);
+      const response = await axios.patch(
+        `https://deyarak-app.onrender.com/api/v1/users/updateMyPassword/${userId}`,
+        passwordData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setIsChangePasswordModalOpen(false);
+      window.location.href = '/login';
+    } catch (error) {
+      setError('Error updating password: Please check your inputs');
+      console.error('Error updating password:', error);
+    }
+  };
 
   return (
     <div className='profile-container'>
@@ -132,6 +164,9 @@ const Profile = () => {
             </div>
             <button className='update-button' onClick={handleUpdate}>
               Update Profile
+            </button>
+            <button className='update-button' onClick={handlePasswordChange}>
+              Change Password
             </button>
           </div>
         </div>
@@ -185,6 +220,53 @@ const Profile = () => {
               type='button'
               className='close-modal'
               onClick={handleCloseModal}
+            >
+              Close
+            </button>
+          </form>
+        </div>
+      </div>
+      <div className={`modal ${isChangePasswordModalOpen ? 'show' : ''}`}>
+        <div className='modal-content'>
+          <form onSubmit={handleChangePassword} className='update-form'>
+            <label>
+              Current Password:
+              <input
+                type='password'
+                name='currentPassword'
+                value={passwordData.currentPassword}
+                onChange={handlePasswordInputChange}
+                className='update-input'
+              />
+            </label>
+            <label>
+              New Password:
+              <input
+                type='password'
+                name='newPassword'
+                value={passwordData.newPassword}
+                onChange={handlePasswordInputChange}
+                className='update-input'
+              />
+            </label>
+            <label>
+              Confirm New Password:
+              <input
+                type='password'
+                name='newPasswordConfirm'
+                value={passwordData.newPasswordConfirm}
+                onChange={handlePasswordInputChange}
+                className='update-input'
+              />
+            </label>
+            {error && <div className='error-message'>{error}</div>}
+            <button type='submit' className='update-button'>
+              Change Password
+            </button>
+            <button
+              type='button'
+              className='close-modal'
+              onClick={handleCloseChangePasswordModal}
             >
               Close
             </button>

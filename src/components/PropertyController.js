@@ -9,32 +9,53 @@ import {
   FaBath,
   FaDollarSign,
   FaExpand,
+  FaSort,
 } from 'react-icons/fa';
 import PropertyDetails from './PropertyDetails';
 
 const PropertyController = () => {
   const [properties, setProperties] = useState([]);
+  const [filteredProperties, setFilteredProperties] = useState([]);
   const [error, setError] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchProperties() {
+      setLoading(true);
       try {
         const response = await axios.get(
-          'https://deyarak-app.onrender.com/api/v1/properties'
+          `https://deyarak-app.onrender.com/api/v1/properties?sort=-price,-size`
         );
+        console.log('API Response:', response.data);
         if (response.data.status === 'success') {
           setProperties(response.data.data.data || []);
+          setFilteredProperties(response.data.data.data || []);
         } else {
           setError('Error fetching properties');
         }
       } catch (error) {
+        console.error('Error fetching properties:', error);
         setError('Error fetching properties');
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchProperties();
   }, []);
+
+  useEffect(() => {
+    let filtered = properties.filter((property) => {
+      return (
+        (property.locations?.address || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        property.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    });
+
+    setFilteredProperties(filtered);
+  }, [searchQuery, properties]);
 
   const handlePropertyClick = (propertyId) => {
     setSelectedProperty(propertyId);
@@ -44,51 +65,72 @@ const PropertyController = () => {
     setSelectedProperty(null);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   if (error) {
     return <div>{error}</div>;
   }
 
+  if (filteredProperties.length === 0) {
+    return <div>No properties found.</div>;
+  }
+
   return (
-    <div className='property-controller'>
-      <h1>Properties Collection</h1>
-      <br></br>
-      <div className='property-list'>
-        {properties.map((property) => (
-          <div
-            key={property._id}
-            className='property-item'
-            onClick={() => handlePropertyClick(property._id)}
-          >
-            <div className='carousel-container'>
-              <Carousel>
-                {property.images.map((image, index) => (
-                  <Carousel.Item key={index}>
-                    <img
-                      className='d-block w-100'
-                      src={image.url}
-                      alt={`Slide ${index + 1}`}
-                    />
-                  </Carousel.Item>
-                ))}
-              </Carousel>
-            </div>
-            <div className='property-details'>
-              <h2>
-                <FaMapMarkerAlt /> {property.locations.address}
-              </h2>
-              <p>
-                <FaDollarSign /> Price: ${property.price}
-              </p>
-              <p className='description'>{property.description}</p>
-              <p>
-                <FaBed /> Number of Rooms: {property.numberOfRooms}
-              </p>
-              <p>
-                <FaBath /> Number of Bathrooms: {property.numberOfBathrooms}
-              </p>
-              <p>
-                <FaExpand /> Size: {property.size} sqm
-              </p>
+    <div className="property-controller container">
+      <h1 className="text-center mt-4">Properties Collection</h1>
+      <div className="controls mb-4 d-flex justify-content-between">
+        <input
+          type="text"
+          placeholder="Search properties..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="form-control w-50"
+        />
+        <button onClick={() => setFilteredProperties([...filteredProperties].reverse())} className="btn btn-outline-secondary">
+          <FaSort /> Sort
+        </button>
+      </div>
+      <div className="row">
+        {filteredProperties.map((property) => (
+          <div key={property._id} className="col-lg-4 mb-4">
+            <div className="card property-item" onClick={() => handlePropertyClick(property._id)}>
+              <div className="carousel-container">
+                <Carousel>
+                  {property.images.map((image, index) => (
+                    <Carousel.Item key={index}>
+                      <img
+                        className="d-block w-100"
+                        src={image.url}
+                        alt={`Slide ${index + 1}`}
+                      />
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              </div>
+              <div className="card-body">
+                <h2 className="card-title">
+                  <FaMapMarkerAlt /> {property.locations?.address}
+                </h2>
+                <p>
+                  <FaDollarSign /> Price: ${property.price}
+                </p>
+                <p className="description">{property.description}</p>
+                <p>
+                  <FaBed /> Number of Rooms: {property.numberOfRooms}
+                </p>
+                <p>
+                  <FaBath /> Number of Bathrooms: {property.numberOfBathrooms}
+                </p>
+                <p>
+                  <FaExpand /> Size: {property.size} sqm
+                </p>
+              </div>
             </div>
           </div>
         ))}

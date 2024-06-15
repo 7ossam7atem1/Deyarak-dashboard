@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
-} from "react-router-dom";
-import LoginForm from "./components/LoginForm";
-import Dashboard from "./components/Dashboard";
-import SplashScreen from "./components/SplashScreen";
-import SignupForm from "./components/SignupForm";
-import NotFound from "./components/NotFound";
-import { useAuth } from "./components/AuthProvider";
-import ResetPassword from "./components/resetPassword";
+} from 'react-router-dom';
+import LoginForm from './components/LoginForm';
+import Dashboard from './components/Dashboard';
+import SplashScreen from './components/SplashScreen';
+import SignupForm from './components/SignupForm';
+import NotFound from './components/NotFound';
+import { useAuth } from './components/AuthProvider';
+import ResetPassword from './components/resetPassword';
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -19,15 +19,15 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SplashScreen />} />
-        <Route path="/signup" element={<SignupForm />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/resetPassword/:token" element={<ResetPassword />} />
+        <Route path='/' element={<SplashScreen />} />
+        <Route path='/signup' element={<SignupForm />} />
+        <Route path='/login' element={<LoginForm />} />
+        <Route path='/resetPassword/:token' element={<ResetPassword />} />
         <Route
-          path="/dashboard"
-          element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+          path='/dashboard'
+          element={isAuthenticated ? <Dashboard /> : <Navigate to='/login' />}
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </Router>
   );
