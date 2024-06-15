@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Modal, Button, Carousel } from "react-bootstrap";
-import { FaBed, FaBath, FaDollarSign, FaRuler, FaHome } from "react-icons/fa";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import "../css/PropertyDetails.css";
-import L from "leaflet";
-import Cookies from "js-cookie";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Modal, Button, Carousel } from 'react-bootstrap';
+import { FaBed, FaBath, FaDollarSign, FaRuler, FaHome } from 'react-icons/fa';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import '../css/PropertyDetails.css';
+import L from 'leaflet';
+import Cookies from 'js-cookie';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -18,16 +18,22 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
   useEffect(() => {
     async function fetchProperty() {
       try {
+        const token = Cookies.get('token'); // Get the token from cookies
         const response = await axios.get(
-          `https://deyarak-app.onrender.com/api/v1/properties/${propertyId}`
+          `https://deyarak-app.onrender.com/api/v1/properties/${propertyId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the request headers
+            },
+          }
         );
-        if (response.data.status === "success") {
+        if (response.data.status === 'success') {
           setProperty(response.data.data?.data || {});
         } else {
-          setError("Error fetching property details");
+          setError('Error fetching property details');
         }
       } catch (error) {
-        setError("Error fetching property details");
+        setError('Error fetching property details');
       }
     }
 
@@ -38,7 +44,7 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
 
   const handleDelete = async () => {
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get('token');
       await axios.delete(
         `https://deyarak-app.onrender.com/api/v1/properties/${propertyId}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -46,7 +52,7 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
       setDeleted(true);
       onHide();
     } catch (error) {
-      console.error("Error deleting property:", error);
+      console.error('Error deleting property:', error);
     }
   };
 
@@ -54,8 +60,8 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
     <Modal
       show={show}
       onHide={onHide}
-      size="lg"
-      className="property-details-modal"
+      size='lg'
+      className='property-details-modal'
     >
       <Modal.Header closeButton>
         <Modal.Title>Property Details</Modal.Title>
@@ -63,14 +69,14 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
       <Modal.Body>
         {error && <div>{error}</div>}
         {property && (
-          <div className="property-container">
-            <div className="property-images">
+          <div className='property-container'>
+            <div className='property-images'>
               {property.images && property.images.length > 0 ? (
                 <Carousel>
                   {property.images.map((image, index) => (
                     <Carousel.Item key={index}>
                       <img
-                        className="d-block w-100 carousel-img"
+                        className='d-block w-100 carousel-img'
                         src={image.url}
                         alt={`Slide ${index + 1}`}
                       />
@@ -81,8 +87,8 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
                 <p>No images available</p>
               )}
             </div>
-            <div className="property-details-info">
-              <div className="property-info">
+            <div className='property-details-info'>
+              <div className='property-info'>
                 <h2>
                   <FaBed /> {property.numberOfRooms} Bedrooms
                 </h2>
@@ -98,14 +104,14 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
                 <div>
                   <FaHome /> Category: {property.category}
                 </div>
-                <div>Furnished: {property.furnished ? "Yes" : "No"}</div>
-                <div>Finished: {property.finished ? "Yes" : "No"}</div>
-                <div>Elevator: {property.elevator ? "Yes" : "No"}</div>
+                <div>Furnished: {property.furnished ? 'Yes' : 'No'}</div>
+                <div>Finished: {property.finished ? 'Yes' : 'No'}</div>
+                <div>Elevator: {property.elevator ? 'Yes' : 'No'}</div>
                 <div>Age: {property.propertyAge} years</div>
                 <div>Total Rooms: {property.totalRooms}</div>
-                <div className="amenities">
+                <div className='amenities'>
                   <h3>Amenities</h3>
-                  <ul className="amenities-list">
+                  <ul className='amenities-list'>
                     {property.amenities.map((amenity, index) => (
                       <li key={index}>{amenity}</li>
                     ))}
@@ -115,11 +121,11 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
                   <strong>Description:</strong> {property.description}
                 </p>
               </div>
-              <div className="owner-info">
-                <div className="owner-photo">
-                  <img src={property.owner?.photo?.url} alt="Owner" />
+              <div className='owner-info'>
+                <div className='owner-photo'>
+                  <img src={property.owner?.photo?.url} alt='Owner' />
                 </div>
-                <div className="owner-details">
+                <div className='owner-details'>
                   <h3>Owner</h3>
                   <div>
                     <strong>Name:</strong> {property.owner?.name}
@@ -133,24 +139,24 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
                 </div>
               </div>
             </div>
-            <div className="property-buttons">
-              <Button variant="danger" onClick={handleDelete}>
+            <div className='property-buttons'>
+              <Button variant='danger' onClick={handleDelete}>
                 Delete
               </Button>
             </div>
             {property.locations && (
-              <div className="property-map">
+              <div className='property-map'>
                 <MapContainer
                   center={[
                     property.locations.coordinates[1],
                     property.locations.coordinates[0],
                   ]}
                   zoom={11}
-                  style={{ height: "400px", width: "100%" }}
+                  style={{ height: '400px', width: '100%' }}
                 >
                   <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Deyarak</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                   />
                   {property.locations && (
                     <Marker
@@ -158,7 +164,7 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
                         property.locations.coordinates[0],
                         property.locations.coordinates[1],
                       ]}
-                      icon={L.divIcon({ className: "custom-marker" })}
+                      icon={L.divIcon({ className: 'custom-marker' })}
                     >
                       <Popup>{property.locations.address}</Popup>
                     </Marker>

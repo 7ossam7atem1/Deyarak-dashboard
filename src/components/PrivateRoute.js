@@ -1,7 +1,7 @@
 // PrivateRoute.js
-import React from "react";
-import { Route, Navigate } from "react-router-dom";
-import { useAuth } from "./AuthProvider";
+import React from 'react';
+import { Route, Navigate } from 'react-router-dom';
+import { useAuth } from './AuthProvider';
 
 const PrivateRoute = ({ element: Element, ...rest }) => {
   const { isAuthenticated } = useAuth();
@@ -9,7 +9,7 @@ const PrivateRoute = ({ element: Element, ...rest }) => {
   return (
     <Route
       {...rest}
-      element={isAuthenticated ? <Element /> : <Navigate to="/login" replace />}
+      element={isAuthenticated ? <Element /> : <Navigate to='/login' replace />}
     />
   );
 };

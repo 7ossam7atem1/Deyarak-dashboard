@@ -1,4 +1,3 @@
-
 .login-form-container {
   height: 100vh;
   display: flex;
@@ -7,7 +6,7 @@
   background: linear-gradient(to bottom right, #ff725e, #ffffff);
 }
 
-.login-form {
+.login-form, .forgot-password-form {
   width: 450px; 
   border-radius: 15px; 
   background-color: rgba(255, 255, 255, 0.9);
@@ -45,6 +44,10 @@
   background-color: #ff5a3c; 
 }
 
+.forgot-password {
+  margin-top: 10px;
+}
+
 .popup {
   position: fixed;
   top: 50%;
@@ -72,4 +75,12 @@
   top: 10px;
   right: 10px;
   cursor: pointer;
+}
+
+.text-success {
+  color: #28a745;
+}
+
+.text-danger {
+  color: #dc3545;
 }

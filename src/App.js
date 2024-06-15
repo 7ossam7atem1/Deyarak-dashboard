@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -12,6 +11,7 @@ import SplashScreen from "./components/SplashScreen";
 import SignupForm from "./components/SignupForm";
 import NotFound from "./components/NotFound";
 import { useAuth } from "./components/AuthProvider";
+import ResetPassword from "./components/resetPassword";
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -22,6 +22,7 @@ const App = () => {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/resetPassword/:token" element={<ResetPassword />} />
         <Route
           path="/dashboard"
           element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
