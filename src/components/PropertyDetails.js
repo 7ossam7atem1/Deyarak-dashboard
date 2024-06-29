@@ -10,10 +10,9 @@ import Cookies from 'js-cookie';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
-const PropertyDetails = ({ propertyId, show, onHide }) => {
+const PropertyDetails = ({ propertyId, show, onHide, onDelete }) => {
   const [property, setProperty] = useState(null);
   const [error, setError] = useState(null);
-  const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
     async function fetchProperty() {
@@ -23,7 +22,7 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
           `https://deyarak-app.onrender.com/api/v1/properties/${propertyId}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, 
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -40,17 +39,11 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
     if (show && propertyId) {
       fetchProperty();
     }
-  }, [propertyId, show, deleted]);
+  }, [propertyId, show]);
 
   const handleDelete = async () => {
     try {
-      const token = Cookies.get('token');
-      await axios.delete(
-        `https://deyarak-app.onrender.com/api/v1/properties/${propertyId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setDeleted(true);
-      onHide();
+      await onDelete(propertyId);
     } catch (error) {
       console.error('Error deleting property:', error);
     }
@@ -178,5 +171,4 @@ const PropertyDetails = ({ propertyId, show, onHide }) => {
     </Modal>
   );
 };
-
 export default PropertyDetails;

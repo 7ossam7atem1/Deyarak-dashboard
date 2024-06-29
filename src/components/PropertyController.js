@@ -12,6 +12,7 @@ import {
   FaSort,
 } from 'react-icons/fa';
 import PropertyDetails from './PropertyDetails';
+import Cookies from 'js-cookie';
 
 const PropertyController = () => {
   const [properties, setProperties] = useState([]);
@@ -47,9 +48,11 @@ const PropertyController = () => {
   }, []);
 
   useEffect(() => {
-    let filtered = properties.filter((property) => {
+    const filtered = properties.filter((property) => {
       return (
-        (property.locations?.address || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (property.locations?.address || '')
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
         property.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
     });
@@ -69,6 +72,25 @@ const PropertyController = () => {
     setSearchQuery(event.target.value);
   };
 
+  const handleDelete = async (propertyId) => {
+    try {
+      const token = Cookies.get('token');
+      await axios.delete(
+        `https://deyarak-app.onrender.com/api/v1/properties/${propertyId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setProperties(
+        properties.filter((property) => property._id !== propertyId)
+      );
+      setFilteredProperties(
+        filteredProperties.filter((property) => property._id !== propertyId)
+      );
+      setSelectedProperty(null);
+    } catch (error) {
+      console.error('Error deleting property:', error);
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -77,68 +99,77 @@ const PropertyController = () => {
     return <div>{error}</div>;
   }
 
-  if (filteredProperties.length === 0) {
-    return <div>No properties found.</div>;
-  }
-
   return (
-    <div className="property-controller container">
-      <h1 className="text-center mt-4">Properties Collection</h1>
-      <div className="controls mb-4 d-flex justify-content-between">
+    <div className='property-controller container'>
+      <h1 className='text-center mt-4'>Properties Collection</h1>
+      <div className='controls mb-4 d-flex justify-content-between'>
         <input
-          type="text"
-          placeholder="Search properties..."
+          type='text'
+          placeholder='Search properties...'
           value={searchQuery}
           onChange={handleSearchChange}
-          className="form-control w-50"
+          className='form-control w-50'
         />
-        <button onClick={() => setFilteredProperties([...filteredProperties].reverse())} className="btn btn-outline-secondary">
+        <button
+          onClick={() =>
+            setFilteredProperties([...filteredProperties].reverse())
+          }
+          className='btn btn-outline-secondary'
+        >
           <FaSort /> Sort
         </button>
       </div>
-      <div className="row">
-        {filteredProperties.map((property) => (
-          <div key={property._id} className="col-lg-4 mb-4">
-            <div className="card property-item" onClick={() => handlePropertyClick(property._id)}>
-              <div className="carousel-container">
-                <Carousel>
-                  {property.images.map((image, index) => (
-                    <Carousel.Item key={index}>
-                      <img
-                        className="d-block w-100"
-                        src={image.url}
-                        alt={`Slide ${index + 1}`}
-                      />
-                    </Carousel.Item>
-                  ))}
-                </Carousel>
-              </div>
-              <div className="card-body">
-                <h2 className="card-title">
-                  <FaMapMarkerAlt /> {property.locations?.address}
-                </h2>
-                <p>
-                  <FaDollarSign /> Price: ${property.price}
-                </p>
-                <p className="description">{property.description}</p>
-                <p>
-                  <FaBed /> Number of Rooms: {property.numberOfRooms}
-                </p>
-                <p>
-                  <FaBath /> Number of Bathrooms: {property.numberOfBathrooms}
-                </p>
-                <p>
-                  <FaExpand /> Size: {property.size} sqm
-                </p>
+      {filteredProperties.length === 0 ? (
+        <div>No properties found.</div>
+      ) : (
+        <div className='row'>
+          {filteredProperties.map((property) => (
+            <div key={property._id} className='col-lg-4 mb-4'>
+              <div
+                className='card property-item'
+                onClick={() => handlePropertyClick(property._id)}
+              >
+                <div className='carousel-container'>
+                  <Carousel>
+                    {property.images.map((image, index) => (
+                      <Carousel.Item key={index}>
+                        <img
+                          className='d-block w-100'
+                          src={image.url}
+                          alt={`Slide ${index + 1}`}
+                        />
+                      </Carousel.Item>
+                    ))}
+                  </Carousel>
+                </div>
+                <div className='card-body'>
+                  <h2 className='card-title'>
+                    <FaMapMarkerAlt /> {property.locations?.address}
+                  </h2>
+                  <p>
+                    <FaDollarSign /> Price: ${property.price}
+                  </p>
+                  <p className='description'>{property.description}</p>
+                  <p>
+                    <FaBed /> Number of Rooms: {property.numberOfRooms}
+                  </p>
+                  <p>
+                    <FaBath /> Number of Bathrooms: {property.numberOfBathrooms}
+                  </p>
+                  <p>
+                    <FaExpand /> Size: {property.size} sqm
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
       <PropertyDetails
         propertyId={selectedProperty}
         show={!!selectedProperty}
         onHide={handleClosePropertyDetails}
+        onDelete={handleDelete}
       />
     </div>
   );

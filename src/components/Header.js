@@ -36,7 +36,7 @@ const Header = () => {
   return (
     <header className='navbar navbar-dark bg-dark'>
       <div className='container-fluid'>
-        <a className='navbar-brand' href='/'>
+        <a className='navbar-brand' href='#'>
           <img src={logo} alt='Logo' className='logo' />
           Deyarak App
         </a>

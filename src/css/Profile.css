@@ -1,6 +1,6 @@
 .profile-container {
   max-width: 600px;
-  margin: 50px auto;
+  margin: 150px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,7 +11,8 @@
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: 100%;
+  width: 160%;
+  height: 100%;
 }
 
 .profile-header {
@@ -22,15 +23,20 @@
 }
 
 .profile-picture img {
-  width: 80px;
-  height: 80px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .profile-info {
   flex: 1;
+  font: optional;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: larger;
+  font-style: bold;
 }
 
 .profile-name {
@@ -116,7 +122,7 @@
   border-radius: 5px;
 }
 
-.modal-content input[type="file"] {
+.modal-content input[type='file'] {
   margin-bottom: 20px;
 }
 

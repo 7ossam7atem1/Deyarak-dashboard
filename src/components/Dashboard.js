@@ -7,6 +7,7 @@ import Properties from './Properties';
 import Users from './Users';
 import Contacts from './Contacts';
 import PropertyController from './PropertyController';
+import PropertyMap from './propertyMap';
 import '../css/Dashboard.css';
 
 const Dashboard = () => {
@@ -23,6 +24,7 @@ const Dashboard = () => {
           {activeTab === 'users' && <Users />}
           {activeTab === 'contacts' && <Contacts />}
           {activeTab === 'controller' && <PropertyController />}
+          {activeTab === 'map' && <PropertyMap />}
         </main>
       </div>
       <Footer />

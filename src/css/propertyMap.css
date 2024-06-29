@@ -1,0 +1,119 @@
+/* propertyMap.css */
+
+.property-map-container {
+  height: 800px; 
+  width: 100%;
+  position: relative;
+  font-family: Arial, sans-serif;
+}
+
+.map-popup {
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.locate-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.locate-button:hover {
+  background-color: #0056b3;
+}
+
+.radius-input-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.radius-input {
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.radius-button {
+  padding: 5px 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.radius-button:hover {
+  background-color: #0056b3;
+}
+
+.leaflet-tooltip {
+  background-color: #007bff;
+  color: #fff;
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-container {
+  background: #f8f9fa;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-popup-tip-container {
+  display: none;
+}
+
+.leaflet-popup-content {
+  margin: 5px 10px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.leaflet-control-zoom {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .locate-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .radius-input-container {
+    flex-direction: column;
+  }
+
+  .radius-input {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}

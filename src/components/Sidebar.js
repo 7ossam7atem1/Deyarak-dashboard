@@ -1,5 +1,12 @@
 import React from 'react';
-import { FaUser, FaBuilding, FaUsers, FaPhone, FaAdjust } from 'react-icons/fa';
+import {
+  FaUser,
+  FaBuilding,
+  FaUsers,
+  FaPhone,
+  FaAdjust,
+  FaMapMarkedAlt,
+} from 'react-icons/fa';
 import '../css/SideBar.css';
 
 const Sidebar = ({ setActiveTab }) => {
@@ -8,7 +15,7 @@ const Sidebar = ({ setActiveTab }) => {
   };
 
   return (
-    <aside>
+    <aside className='sidebar'>
       <nav>
         <ul>
           <li>
@@ -40,6 +47,11 @@ const Sidebar = ({ setActiveTab }) => {
           <li>
             <button onClick={() => handleTabClick('contacts')} className='btn'>
               <FaPhone className='me-2' /> Contact Users
+            </button>
+          </li>
+          <li>
+            <button onClick={() => handleTabClick('map')} className='btn'>
+              <FaMapMarkedAlt className='me-2' /> Property Map
             </button>
           </li>
         </ul>
