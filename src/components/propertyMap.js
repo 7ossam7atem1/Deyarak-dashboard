@@ -7,7 +7,7 @@ import '../css/propertyMap.css';
 import Cookies from 'js-cookie';
 
 const markerIcon = new L.Icon({
-  iconUrl: require('../images/placeholder.png'), // Ensure this path is correct
+  iconUrl: require('../images/placeholder.png'), 
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -19,7 +19,7 @@ const PropertyMap = () => {
   const [error, setError] = useState(null);
   const [center, setCenter] = useState([51.505, -0.09]);
 
-  // Function to fetch all locations initially
+ 
   const fetchAllLocations = async () => {
     try {
       const token = Cookies.get('token');
@@ -32,7 +32,7 @@ const PropertyMap = () => {
         }
       );
       if (response.data && response.data.status === 'success') {
-        console.log('All locations data:', response.data.data.locations); // Added log
+        console.log('All locations data:', response.data.data.locations);
         setLocations(
           Array.isArray(response.data.data.locations)
             ? response.data.data.locations

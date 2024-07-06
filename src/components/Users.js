@@ -71,6 +71,7 @@ const Users = () => {
     setEditedUserData({
       name: user.name,
       email: user.email,
+      active: user.active,
     });
   };
 
@@ -84,6 +85,7 @@ const Users = () => {
       const updatedUser = {
         name: editedUserData.name,
         email: editedUserData.email,
+        active: editedUserData.active,
       };
       await axios.patch(
         `https://deyarak-app.onrender.com/api/v1/users/${selectedUser._id}`,
@@ -106,8 +108,15 @@ const Users = () => {
     }
   };
 
+  const handleToggleActive = () => {
+    setEditedUserData((prevData) => ({
+      ...prevData,
+      active: !prevData.active,
+    }));
+  };
+
   const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -125,8 +134,8 @@ const Users = () => {
         <input
           type='text'
           className='form-control'
-          placeholder='Search by name'
-          aria-label='Search by name'
+          placeholder='Search by email'
+          aria-label='Search by email'
           aria-describedby='search-button'
           value={searchTerm}
           onChange={handleSearch}
@@ -180,10 +189,12 @@ const Users = () => {
       {showModal && (
         <div className='modal-overlay'>
           <div className='modal-content'>
-            <button className='modal-close' onClick={handleCloseModal}>
-              &times;
-            </button>
-            <h2>Edit User</h2>
+            <div className='modal-header'>
+              <h2>Edit User</h2>
+              <button className='modal-close' onClick={handleCloseModal}>
+                &times;
+              </button>
+            </div>
             <form>
               <div className='mb-3'>
                 <label htmlFor='name' className='form-label'>
@@ -219,20 +230,34 @@ const Users = () => {
                   }
                 />
               </div>
-              <button
-                type='button'
-                className='btn btn-primary'
-                onClick={handleSaveChanges}
-              >
-                Save Changes
-              </button>
-              <button
-                type='button'
-                className='btn btn-secondary ms-2'
-                onClick={handleCloseModal}
-              >
-                Cancel
-              </button>
+              <div className='form-check form-switch mb-3'>
+                <input
+                  type='checkbox'
+                  className='form-check-input'
+                  id='active'
+                  checked={editedUserData.active}
+                  onChange={handleToggleActive}
+                />
+                <label className='form-check-label' htmlFor='active'>
+                  Active
+                </label>
+              </div>
+              <div className='modal-buttons'>
+                <button
+                  type='button'
+                  className='btn btn-primary'
+                  onClick={handleSaveChanges}
+                >
+                  Save Changes
+                </button>
+                <button
+                  type='button'
+                  className='btn btn-secondary'
+                  onClick={handleCloseModal}
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         </div>

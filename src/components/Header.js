@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import '../css/Header.css';
-import logo from '../../src/logo9png.png';
+import logo from '../../src/dashboardicon.png';
 
 const Header = () => {
   const [user, setUser] = useState(null);
@@ -38,7 +38,6 @@ const Header = () => {
       <div className='container-fluid'>
         <a className='navbar-brand' href='#'>
           <img src={logo} alt='Logo' className='logo' />
-          Deyarak App
         </a>
         {user && (
           <div className='user-info'>
